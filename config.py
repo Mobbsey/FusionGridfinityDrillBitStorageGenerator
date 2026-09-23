@@ -14,7 +14,7 @@ LEGACY_PANEL_IDS = ("SolidScriptsAddinsPanel",)
 CREATE_BINS_INSERT_AFTER_ID = "ScriptsManagerCommand"
 
 CREATE_BINS_COMMAND_ID = "DrillBitGridfinity_CreateBins"
-CREATE_BINS_COMMAND_NAME = "Create Drill Bit Bins"
+CREATE_BINS_COMMAND_NAME = "Gridfinity Drill Bit Storage"
 CREATE_BINS_COMMAND_DESCRIPTION = (
     "Create Gridfinity-compatible storage bins with drill slots and labels."
 )

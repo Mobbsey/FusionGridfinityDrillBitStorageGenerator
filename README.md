@@ -61,9 +61,9 @@ git clone https://github.com/Mobbsey/FusionGridfinityDrillBitStorageGenerator.gi
 - In Fusion open `Scripts and Add-Ins` window by pressing `Shift + S`.
   - It can also be found in the UI `Design -> Utilities -> ADD-INS`
 - Select `Add-Ins` tab and press `+` icon to add new add in
-- Select path to the repository downloaded in Step 1. Choose the folder containing `GridfinityDrillBitStorageGenerator.py`.
-- `GridfinityDrillBitStorageGenerator` should appear in the list of add ins
-- Select `GridfinityDrillBitStorageGenerator` and click `Run` to launch the add in
+- Select path to the repository downloaded in Step 1. Choose the folder containing `DrillBitGridfinity.py`.
+- `DrillBitGridfinity` should appear in the list of add ins
+- Select `DrillBitGridfinity` and click `Run` to launch the add in
 - `Gridfinity Drill Bit Storage` option should appear in `Create` menu in the Solid body workspace environment, along with a toolbar on the Solid > Create toolbar panel
 
 ## Update
