@@ -1,0 +1,13 @@
+{
+    "autodeskProduct": "Fusion",
+    "type": "addin",
+    "id": "9b3fc1cf-e73d-4bd9-b2fc-27dbed778516",
+    "author": "Paul Mobbs",
+    "description": {
+        "": "Creates Gridfinity-compatible storage bins with sized-slots for drill bits, complete with embossed labels."
+    },
+    "version": "1.0.1",
+    "runOnStartup": false,
+    "supportedOS": "windows|mac",
+    "editEnabled": true
+}
