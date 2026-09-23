@@ -75,9 +75,8 @@ To update the script download latest sources into the same location and relaunch
 The plugin is free. However, if you want to support the project you can do so by [buying me a coffe](https://www.buymeacoffee.com/mobbsey).
 
 ## Credits
-
-[Le0Michine] Fusion Gridfinity Generator (https://github.com/Le0Michine/FusionGridfinityGenerator/)
-[Gridfinity](https://www.youtube.com/watch?v=ra_9zU-mnl8) by [Zack Freedman](https://www.youtube.com/c/ZackFreedman/about)
+- Fusion Gridfinity Generator by [Le0Michine](https://github.com/Le0Michine/FusionGridfinityGenerator/)
+- [Gridfinity](https://www.youtube.com/watch?v=ra_9zU-mnl8) by [Zack Freedman](https://www.youtube.com/c/ZackFreedman/about)
 
 This work is licensed under the same license as Gridfinity, being a
 [Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International License][cc-by-nc-sa].
