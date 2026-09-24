@@ -1,7 +1,7 @@
 [![CC BY-NC-SA 4.0][cc-by-nc-sa-shield]][cc-by-nc-sa]
 
 ## Description
-Add-In for Fusion 360 allowing quick generation of simple [gridfinity](https://www.youtube.com/watch?v=ra_9zU-mnl8) bins to store Drill Bits. Bins can be specified to hold any number of drill bits, specified by their diameter. By selected a type of bit (currently HSS, BradPoint, Masonry, or Tile), the add-in can estimate the length of the bits to make for fast generation of bins. Note however that this is based upon published "typical" values, despite including a fair tollerance, you may need to manually provide measurements if your drill bits are of a less-typical dimension.
+Add-In for Fusion 360 allowing quick generation of simple [gridfinity](https://www.youtube.com/watch?v=ra_9zU-mnl8) bins to store Drill Bits. Bins can be generated to hold any number of drill bits, specified by their diameter. By selecting a type of bit (currently HSS, BradPoint, Masonry, or Tile), the add-in can estimate the length of the bits to make for fast generation of bins. Note however that this is based upon published "typical" values, despite including a fair tollerance, you may need to manually provide measurements if your drill bits are of a less-typical dimension.
 
 ![](/documentation/assets/gridfinity-drill-bit-storage.png)
 
