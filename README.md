@@ -10,6 +10,13 @@ This add-in utilises the Gridfinity Bin generation code published by Le0Michine 
 
 ## Features
 
+- add bits of varying size to a single Gridfinity compatable bin (limited to a maximum size of 10U x 10U)
+- as well as the bin for each sized bit, the bin features a depression, allowing easy retrival of the bits:
+
+![](/documentation/assets/dill-bit-depression.png)
+
+## Generate Dialog
+
 ![](/documentation/assets/fusion-dialog-bin-generator.png)
 
 ### Drill Bit Type
@@ -36,6 +43,11 @@ This add-in utilises the Gridfinity Bin generation code published by Le0Michine 
 ### Gridfinity Bin Utilisation
 - whether the size of the bin has been set manually or automatically, this section will show the percentage utilisation of the bin, and is provided only for reference as an indication of remaining space within the bin.
 
+## Roadmap
+Some features currently planned:
+- customise the number of bits held per bin (and therefore control the height/width of each bin)
+
+If there are other features you would like to see, please leave a feature request!
 
 ## Installation
 
