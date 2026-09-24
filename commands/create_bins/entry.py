@@ -271,7 +271,10 @@ def update_bin_from_inputs(inputs: adsk.core.CommandInputs) -> None:
 
     for drill_bit in drill_bit_rows:
         _gridfinity_bin.add_bit(
-            drill_bit["diameter_mm"], drill_bit["optional_length_mm"]
+            drill_bit["diameter_mm"], 
+            drill_bit["optional_length_mm"],
+            drill_bit["width"],
+            drill_bit["depth"]
         )
 
     _gridfinity_bin.explicit_u_width = auto_property_handler(

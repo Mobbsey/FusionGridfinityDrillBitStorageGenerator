@@ -35,6 +35,11 @@ def build_dialog(
 ) -> None:
     """Create all inputs for a new command instance."""
     inputs = command.commandInputs
+    
+    command.setDialogMinimumSize(
+        width = 380,
+        height = 400
+    )
 
     drill_bit_group = inputs.addGroupCommandInput(DRILL_BIT_GROUP_ID, "Drill Bits")
     drill_bit_group.isExpanded = True
@@ -48,7 +53,7 @@ def build_dialog(
         drill_type_input.listItems.add(drill_type.value, index == 0)
 
     drill_bit_table = drill_bit_group.children.addTableCommandInput(
-        DRILL_BIT_TABLE_ID, "Drill Bits", 2, "1:1"
+        DRILL_BIT_TABLE_ID, "Drill Bits", 4, "5:4:3:3"
     )
     drill_bit_table.minimumVisibleRows = 3
     drill_bit_table.maximumVisibleRows = 10
@@ -156,3 +161,5 @@ def build_dialog(
             input_id, label, "0"
         )
         utilisation.isReadOnly = True
+
+    

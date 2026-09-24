@@ -18,53 +18,92 @@ def reset_row_ids():
 
 def add_header(command_inputs, table):
     """Add the fixed drill-table header row."""
-    measurement_header = command_inputs.addStringValueInput(
-        "measurement_header", "", "Bit Diameter (mm)"
+    diameter_header = command_inputs.addStringValueInput(
+        "diameter_header", "", "Bit Diameter (mm)"
     )
-    measurement_header.isReadOnly = True
+    diameter_header.isReadOnly = True
 
-    optional_header = command_inputs.addStringValueInput(
-        "optional_integer_header", "", "Bit Length (mm)"
-    )
-    optional_header.isReadOnly = True
+    length_header = command_inputs.addStringValueInput(
+            "length_header", "", "Bit Length (mm)"
+        )
+    length_header.isReadOnly = True
+        
+    width_header = command_inputs.addStringValueInput(
+            "width_header", "", "Bin Width"
+        )
+    width_header.isReadOnly = True
+    
+    depth_header = command_inputs.addStringValueInput(
+            "depth_header", "", "Bin Depth"
+        )
+    depth_header.isReadOnly = True
+            
 
-    table.addCommandInput(measurement_header, HEADER_ROW, 0)
-    table.addCommandInput(optional_header, HEADER_ROW, 1)
+    table.addCommandInput(diameter_header, HEADER_ROW, 0)
+    table.addCommandInput(length_header, HEADER_ROW, 1)
+    table.addCommandInput(width_header, HEADER_ROW, 2)
+    table.addCommandInput(depth_header, HEADER_ROW, 3)
 
 
-def add_row(table, measurement_mm=0.0, optional_integer_mm=None):
+def add_row(table, measurement_mm=0.0, optional_integer_mm=None, width = 2, depth = 2):
     """Append one editable row and select it."""
     global _next_row_id
 
-    command_inputs = adsk.core.CommandInputs.cast(table.commandInputs)
-    if command_inputs is None:
+    table_input = adsk.core.CommandInputs.cast(table.commandInputs)
+    if table_input is None:
         raise RuntimeError("Unable to access the drill-table command inputs.")
     row_id = _next_row_id
     _next_row_id += 1
 
-    measurement = command_inputs.addValueInput(
+    diameter_input = table_input.addValueInput(
         "{}{}{}".format(DRILL_BIT_SPEC_PREFIX, "diameter", row_id),
         "",
         "mm",
         adsk.core.ValueInput.createByString(f"{measurement_mm:.1f} mm"),
     )
-    if measurement is None:
+    if diameter_input is None:
         raise RuntimeError("Failed to create a drill diameter input.")
-    measurement.tooltip = "Bit diameter in millimetres (one decimal place)"
+    diameter_input.tooltip = "Bit diameter in millimetres (one decimal place)"
 
-    optional_text = "" if optional_integer_mm is None else str(int(optional_integer_mm))
-    optional_integer = command_inputs.addStringValueInput(
+    length_text = "" if optional_integer_mm is None else str(int(optional_integer_mm))
+    length_input = table_input.addStringValueInput(
         "{}{}{}".format(DRILL_BIT_SPEC_PREFIX, "length", row_id),
         "",
-        optional_text,
+        length_text,
     )
-    if optional_integer is None:
+    if length_input is None:
         raise RuntimeError("Failed to create a drill length input.")
-    optional_integer.tooltip = "Bit length in millimetres (optional)"
+    length_input.tooltip = "Bit length in millimetres (default: blank/auto)"
+
+    width_text = str(width)
+    width_input = table_input.addStringValueInput(
+        "{}{}{}".format(DRILL_BIT_SPEC_PREFIX, "width", row_id),
+        "",
+        width_text,
+    )
+    if width_input is None:
+        raise RuntimeError("Failed to create a drill bin width input.")
+    width_input.tooltip = "Number of bits to fit in the width of the bin (default: 2)"
+    
+
+    depth_text = str(width)
+    depth_input = table_input.addStringValueInput(
+        "{}{}{}".format(DRILL_BIT_SPEC_PREFIX, "depth", row_id),
+        "",
+        depth_text,
+    )
+    if depth_input is None:
+        raise RuntimeError("Failed to create a drill bin depth input.")
+    depth_input.tooltip = "Number of bits to fit in the depth of the bin (default: 2)"
+
+
+
 
     row = table.rowCount
-    table.addCommandInput(measurement, row, 0)
-    table.addCommandInput(optional_integer, row, 1)
+    table.addCommandInput(diameter_input, row, 0)
+    table.addCommandInput(length_input, row, 1)
+    table.addCommandInput(width_input, row, 2)
+    table.addCommandInput(depth_input, row, 3)
     table.selectedRow = row
 
 
@@ -113,27 +152,43 @@ def read_rows(table):
         diameter_input = adsk.core.ValueCommandInput.cast(
             table.getInputAtPosition(row, 0)
         )
-        optional_input = adsk.core.StringValueCommandInput.cast(
+        length_input = adsk.core.StringValueCommandInput.cast(
             table.getInputAtPosition(row, 1)
         )
 
-        if not diameter_input or not optional_input:
+        width_input = adsk.core.StringValueCommandInput.cast(
+            table.getInputAtPosition(row, 2)
+        )
+
+        depth_input = adsk.core.StringValueCommandInput.cast(
+            table.getInputAtPosition(row, 3)
+        )
+
+        if not diameter_input or not length_input or not width_input or not depth_input:
             raise RuntimeError(f"Drill-bit table row {row} is incomplete.")
 
         # ValueCommandInput.value is in Fusion's database length unit (cm).
         diameter_mm = internal_length_to_mm(diameter_input.value)
 
-        optional_text = optional_input.value.strip()
-        optional_length_mm = int(optional_text) if optional_text else None
+        length_text = length_input.value.strip()
+        length_mm = int(length_text) if length_text else None
+
+        width_text = width_input.value.strip()
+        width = int(width_text) if width_text else 2
+
+        depth_text = depth_input.value.strip()
+        depth = int(depth_text) if depth_text else 2
 
         # Zero is the sentinel used by the UI for an unused placeholder row.
-        if diameter_mm == 0 and optional_length_mm is None:
+        if diameter_mm == 0 and length_mm is None:
             continue
 
         rows.append(
             {
                 "diameter_mm": diameter_mm,
-                "optional_length_mm": optional_length_mm,
+                "optional_length_mm": length_mm,
+                "width": width,
+                "depth": depth,
             }
         )
 
