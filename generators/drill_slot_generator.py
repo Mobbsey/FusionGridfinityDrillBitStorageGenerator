@@ -46,22 +46,18 @@ class DrillSlotGenerator:
 
         self.gridfinity_bin = specification
 
-        futil.log("Cutting drill slots")
         self.create_drill_slots(target_component, target_body)
 
     def reduce_inner_bin_height(
         self, target_body: adsk.fusion.BRepBody, target_component: adsk.fusion.Component
     ):
-        futil.log("Finding top profile")
         top_face = get_top_face(target_body)
         if top_face is None:
             raise RuntimeError("Unable to find a horizontal top face on the bin body.")
 
-        futil.log("Cutting top profile")
         extrude_cut_operation(
             target_component, top_face, -self.INNER_HEIGHT_REDUCTION_MM
         )
-        futil.log("Finished cutting top profile")
 
     def create_bin_sketch(
         self,
@@ -237,7 +233,6 @@ class DrillSlotGenerator:
         self.slot_sketches.clear()
         left_offset = mm_to_internal_length(self.gridfinity_bin.CLEARANCE_MM)
         for idx, bit in enumerate(self.gridfinity_bin.drill_bits):
-            futil.log(f"Sketching {bit.diameter_mm:g} mm bit (index {idx})")
             sketch = self.create_bin_sketch(sketches, front_plane, left_offset, bit)
             self.slot_sketches.append((bit, sketch))
             left_offset += mm_to_internal_length(
@@ -252,8 +247,7 @@ class DrillSlotGenerator:
 
         for idx, (bit, sketch) in enumerate(self.slot_sketches):
             profiles = sketch.profiles
-            futil.log(f"Collecting {bit.diameter_mm:g} mm profiles (index {idx})")
-
+            
             if profiles.count == 0:
                 raise RuntimeError(
                     f"Slot sketch for {bit.diameter_mm:g} mm has no closed profiles."
@@ -296,7 +290,6 @@ class DrillSlotGenerator:
                 self.gridfinity_bin.DEPRESSION_LENGTH_MM,
                 self.SLOT_CUT_START_OFFSET_MM,
             )
-        futil.log("Finished extruding drill slots")
 
     @staticmethod
     def _profiles_input(profiles: list[adsk.fusion.Profile]):
@@ -522,7 +515,6 @@ class DrillSlotGenerator:
         label_plane = self.create_text_profiles(target_body, target_component)
 
         if self.gridfinity_bin.split_for_multicolor:
-            futil.log("Splitting labels from holder for multi-colour printing")
             self.split_body_for_multicolor(
                 target_body,
                 target_component,

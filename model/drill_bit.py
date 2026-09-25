@@ -32,6 +32,8 @@ class DrillBit:
     diameter_mm: float
     bit_type: DrillBitType = DrillBitType.HSS
     explicit_length_mm: float | None = None
+    bin_width_count:int = 2
+    bin_depth_count:int = 2
 
     BITS_PER_SLOT: ClassVar[int] = 2
     MINIMUM_SLOT_WIDTH_MM: ClassVar[float] = 12.0
@@ -50,8 +52,12 @@ class DrillBit:
     @property
     def slot_width_mm(self) -> float:
         """Width allocated to this drill size in the bin."""
+        # calculated_width = (
+        #     self.diameter_mm * self.BITS_PER_SLOT + self.SLOT_SIDE_ALLOWANCE_MM
+        # )
+        # return max(self.MINIMUM_SLOT_WIDTH_MM, calculated_width)
         calculated_width = (
-            self.diameter_mm * self.BITS_PER_SLOT + self.SLOT_SIDE_ALLOWANCE_MM
+            self.diameter_mm * self.bin_width_count + self.SLOT_SIDE_ALLOWANCE_MM
         )
         return max(self.MINIMUM_SLOT_WIDTH_MM, calculated_width)
 
@@ -86,7 +92,8 @@ class DrillBit:
     @property
     def required_depth_mm(self) -> float:
         """Depth needed for the slot profile."""
-        return max(1.2 + max(2.0, self.diameter_mm), self.diameter_mm * 2.0)
+        # return max(1.2 + max(2.0, self.diameter_mm), self.diameter_mm * 2.0)
+        return max(1.2 + max(2.0, self.diameter_mm), self.diameter_mm * self.bin_depth_count)
 
 
 def _positive_finite(value: float, description: str) -> float:
