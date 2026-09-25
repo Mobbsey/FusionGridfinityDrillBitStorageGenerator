@@ -1,0 +1,47 @@
+name: Bump manifest version
+
+on:
+  pull_request_target:
+    branches:
+      - main
+    types:
+      - closed
+
+permissions:
+  contents: write
+
+jobs:
+  bump-version:
+    if: github.event.pull_request.merged == true
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out main
+        uses: actions/checkout@v4
+        with:
+          ref: main
+          fetch-depth: 0
+
+      - name: Commit and push version bump
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
+          for attempt in {1..5}; do
+            git fetch origin main
+            git checkout -B manifest-version-bump origin/main
+
+            python .github/scripts/bump_manifest_version.py
+            git add DrillBitGridfinity.manifest
+            git commit -m "chore: bump manifest version [skip ci]"
+
+            if git push origin HEAD:main; then
+              exit 0
+            fi
+
+            echo "Push conflicted with another update; retrying ($attempt/5)."
+            sleep $((attempt * 2))
+          done
+
+          echo "Unable to push the version bump after 5 attempts."
+          exit 1
