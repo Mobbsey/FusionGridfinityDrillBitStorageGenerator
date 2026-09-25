@@ -6,7 +6,7 @@
     "description": {
         "": "Creates Gridfinity-compatible storage bins with sized-slots for drill bits, complete with embossed labels."
     },
-    "version": "1.0.1",
+    "version": "1.0.2",
     "runOnStartup": false,
     "supportedOS": "windows|mac",
     "editEnabled": true
