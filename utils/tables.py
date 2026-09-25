@@ -16,7 +16,7 @@ def reset_row_ids():
     _next_row_id = 0
 
 
-def add_header(command_inputs, table):
+def add_header(command_inputs: adsk.core.CommandInputs , table):
     """Add the fixed drill-table header row."""
     diameter_header = command_inputs.addStringValueInput(
         "diameter_header", "", "Bit Diameter (mm)"
@@ -32,12 +32,13 @@ def add_header(command_inputs, table):
             "width_header", "", "Bin Width"
         )
     width_header.isReadOnly = True
+    width_header.isVisible = False
     
     depth_header = command_inputs.addStringValueInput(
             "depth_header", "", "Bin Depth"
         )
     depth_header.isReadOnly = True
-            
+    depth_header.isVisible = False
 
     table.addCommandInput(diameter_header, HEADER_ROW, 0)
     table.addCommandInput(length_header, HEADER_ROW, 1)
@@ -75,29 +76,31 @@ def add_row(table, measurement_mm=0.0, optional_integer_mm=None, width = 2, dept
         raise RuntimeError("Failed to create a drill length input.")
     length_input.tooltip = "Bit length in millimetres (default: blank/auto)"
 
-    width_text = str(width)
-    width_input = table_input.addStringValueInput(
+    width_input = table_input.addIntegerSpinnerCommandInput(
         "{}{}{}".format(DRILL_BIT_SPEC_PREFIX, "width", row_id),
         "",
-        width_text,
+        1,
+        5,
+        1,
+        width
     )
     if width_input is None:
         raise RuntimeError("Failed to create a drill bin width input.")
     width_input.tooltip = "Number of bits to fit in the width of the bin (default: 2)"
-    
+    width_input.isVisible = False
 
-    depth_text = str(width)
-    depth_input = table_input.addStringValueInput(
+    depth_input = table_input.addIntegerSpinnerCommandInput(
         "{}{}{}".format(DRILL_BIT_SPEC_PREFIX, "depth", row_id),
         "",
-        depth_text,
+        1,
+        5,
+        1,
+        depth
     )
     if depth_input is None:
         raise RuntimeError("Failed to create a drill bin depth input.")
     depth_input.tooltip = "Number of bits to fit in the depth of the bin (default: 2)"
-
-
-
+    depth_input.isVisible = False
 
     row = table.rowCount
     table.addCommandInput(diameter_input, row, 0)
@@ -105,6 +108,16 @@ def add_row(table, measurement_mm=0.0, optional_integer_mm=None, width = 2, dept
     table.addCommandInput(width_input, row, 2)
     table.addCommandInput(depth_input, row, 3)
     table.selectedRow = row
+
+
+def extended_properties_visible(table: adsk.core.TableCommandInput, visibility:bool):
+    for row in range(0, table.rowCount):
+        for col in range(2, 4):
+            table.getInputAtPosition(row, col).isVisible = visibility
+    if visibility:
+        table.columnRatio = "5:4:3:3"
+    else:
+        table.columnRatio = "5:4:0:0"
 
 
 def validate_rows(table):
@@ -156,11 +169,11 @@ def read_rows(table):
             table.getInputAtPosition(row, 1)
         )
 
-        width_input = adsk.core.StringValueCommandInput.cast(
+        width_input = adsk.core.IntegerSpinnerCommandInput.cast(
             table.getInputAtPosition(row, 2)
         )
 
-        depth_input = adsk.core.StringValueCommandInput.cast(
+        depth_input = adsk.core.IntegerSpinnerCommandInput.cast(
             table.getInputAtPosition(row, 3)
         )
 
@@ -173,11 +186,9 @@ def read_rows(table):
         length_text = length_input.value.strip()
         length_mm = int(length_text) if length_text else None
 
-        width_text = width_input.value.strip()
-        width = int(width_text) if width_text else 2
+        width = width_input.value
 
-        depth_text = depth_input.value.strip()
-        depth = int(depth_text) if depth_text else 2
+        depth = depth_input.value
 
         # Zero is the sentinel used by the UI for an unused placeholder row.
         if diameter_mm == 0 and length_mm is None:

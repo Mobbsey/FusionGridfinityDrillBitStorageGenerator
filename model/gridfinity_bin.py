@@ -5,7 +5,6 @@ from __future__ import annotations
 import math
 
 from .drill_bit import DrillBit, DrillBitType
-from ..lib import fusion360utils as futil
 
 class GridfinityDrillBitBin:
     """Calculated dimensions and contents for one Gridfinity bin."""
@@ -76,7 +75,6 @@ class GridfinityDrillBitBin:
             bin_width_count=width,
             bin_depth_count=depth
         )
-        futil.log(f'Setting {diameter_mm}mm bit to a bin width of {width} and a depth of {depth}')
         self.drill_bits.append(drill_bit)
         self.drill_bits.sort(key=lambda bit: bit.diameter_mm)
         return drill_bit

@@ -21,6 +21,7 @@ from .dialog import (
     DRILL_BIT_TABLE_ADD_ROW_ID,
     DRILL_BIT_TABLE_ID,
     DRILL_BIT_TABLE_REMOVE_ROW_ID,
+    DRILL_BIT_TABLE_SHOW_PROPERTIES_ID,
     DRILL_TYPE_INPUT_ID,
     GRIDFINITY_BIN_HEIGHT_AUTO_ID,
     GRIDFINITY_BIN_HEIGHT_ID,
@@ -183,6 +184,21 @@ def command_input_changed(args: adsk.core.InputChangedEventArgs) -> None:
             table.selectedRow = -1
         update_bin_from_inputs(inputs)
         return
+    
+    elif changed_id == DRILL_BIT_TABLE_SHOW_PROPERTIES_ID:
+        table = _typed_input(
+                    inputs,
+                    DRILL_BIT_TABLE_ID,
+                    adsk.core.TableCommandInput.cast,
+                    "Drill Bit Table",
+                )
+        show_properties = _typed_input(
+                    inputs,
+                    DRILL_BIT_TABLE_SHOW_PROPERTIES_ID,
+                    adsk.core.BoolValueCommandInput.cast,
+                    "Show Properties",
+                ).value
+        tables.extended_properties_visible(table, show_properties)
 
     elif changed_id in {GRIDFINITY_BIN_WIDTH_ID, GRIDFINITY_BIN_WIDTH_AUTO_ID}:
         _gridfinity_bin.explicit_u_width = auto_property_handler(

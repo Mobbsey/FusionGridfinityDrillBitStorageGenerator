@@ -12,6 +12,7 @@ DRILL_TYPE_INPUT_ID = "drill_type"
 DRILL_BIT_TABLE_ID = "drill_bit_table"
 DRILL_BIT_TABLE_ADD_ROW_ID = "add_drill_bit_row"
 DRILL_BIT_TABLE_REMOVE_ROW_ID = "remove_drill_bit_row"
+DRILL_BIT_TABLE_SHOW_PROPERTIES_ID = "extended_properties"
 GRIDFINITY_BIN_GROUP_ID = "gridfinity_bin_group"
 GRIDFINITY_BIN_WIDTH_ID = "gridfinity_bin_width"
 GRIDFINITY_BIN_WIDTH_AUTO_ID = "gridfinity_bin_width_auto"
@@ -53,7 +54,7 @@ def build_dialog(
         drill_type_input.listItems.add(drill_type.value, index == 0)
 
     drill_bit_table = drill_bit_group.children.addTableCommandInput(
-        DRILL_BIT_TABLE_ID, "Drill Bits", 4, "5:4:3:3"
+        DRILL_BIT_TABLE_ID, "Drill Bits", 4, "5:4:0:0"
     )
     drill_bit_table.minimumVisibleRows = 3
     drill_bit_table.maximumVisibleRows = 10
@@ -78,6 +79,10 @@ def build_dialog(
     )
     remove_button.text = "Remove Selected Row"
     drill_bit_table.addToolbarCommandInput(remove_button)
+    
+    ext_properties = drill_bit_group.children.addBoolValueInput(
+        DRILL_BIT_TABLE_SHOW_PROPERTIES_ID, "Show Properties", True, "", False
+    )
 
     gridfinity_bin_group = inputs.addGroupCommandInput(
         GRIDFINITY_BIN_GROUP_ID, "Gridfinity Bin"
